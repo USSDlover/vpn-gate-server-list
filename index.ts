@@ -1,3 +1,4 @@
+import {Host} from "./host";
 
 const rp = require('request-promise');
 import {load} from "cheerio";
@@ -13,9 +14,12 @@ const TABLE_HEADER_FIRST_HEADER_COLUMN = 'Country';
 let $: Root;
 let hostsTable: Cheerio;
 const rows: Cheerio[] = [];
+const hosts: Host[] = [];
 
 const extractHosts = () => {
-    console.log(hostsTable.children(`td`).length);
+    const testHost = new Host(rows[0]);
+    console.log(testHost);
+    // rows.forEach(row => hosts.push(new Host(row)));
 }
 
 const extractRows = (): void => {
