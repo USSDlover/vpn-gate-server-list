@@ -1,94 +1,44 @@
+
 const rp = require('request-promise');
+import {load} from "cheerio";
+
+import Root = cheerio.Root;
+import Cheerio = cheerio.Cheerio;
+
 const url = 'http://202.5.221.66:60279';
 
 const TABLE_ID = 'vg_hosts_table_id';
+const TABLE_HEADER_FIRST_HEADER_COLUMN = 'Country';
 
-// The exact pattern from fetched HTML
-interface IHost {
-    // First <td> and can use innerText
-    country: string;
-    // Second <td> and contains two <span>
-    host: {
-        // First <span>
-        id: string;
-        // Second <span>
-        DDNS: string;
-    };
-    // Thirds <td> have three value
-    sessions: {
-        // Inside <b>
-        users: string;
-        // inside <span>
-        time: string;
-        // innerText
-        totalUsers: string;
-    };
-    // 4th <td> have four value
-    quality: {
-        // first <b> + inside <span>
-        speed: string;
-        // inside second <b>
-        ping: string;
-        // inside third <b>
-        totalTransferredData: string;
-        // innerText
-        loggingPolicy: string;
-    };
-    // 5th <td> have three value
-    ssl: {
-        // value of the <a> 'href' attribute
-        guide: string;
-        /**
-         * after first <br> (innerText).
-         * @example "TCP: 1332"
-         */
-        tcp: string;
-        /**
-         * after second <br> (innerText).
-         * @example "UDP: Supported"
-         */
-        udp: boolean;
-    };
-    // 6th <td> have three value
-    l2tp: {
-        // value of the <a> 'href' attribute
-        guide: string;
-    };
-    // 7th <td> have three value
-    openVpn: {
-        // value of the <a> 'href' attribute
-        configFile: string;
-        /**
-         * after first <br> (innerText).
-         * @example "TCP: 1332"
-         */
-        tcp: string;
-        /**
-         * after second <br> (innerText).
-         * @example "UDP: 1384"
-         */
-        udp: string;
-    };
-    // 8th <td> have three value
-    msSstp: {
-        // value of the <a> 'href' attribute
-        guide: string;
-        // inside <p> > <span> > <b> > <span>
-        hostName: string;
-    };
-    /**
-     * 9th <td> have three value
-     * List of <i>
-     *     Content inside '<i> > <b>'
-     */
-    volunteers: string[];
-    /**
-     * 10th and last <td> have three value
-     * inside '<b> > <span>'
-     */
-    score: string;
+let $: Root;
+let hostsTable: Cheerio;
+const rows: Cheerio[] = [];
+
+const extractHosts = () => {
+    console.log(hostsTable.children(`td`).length);
+}
+
+const extractRows = (): void => {
+    let rowContainer = hostsTable.children(`tbody`).children(`tr`);
+    let tempRowKeep: Cheerio;
+    for (let i = 0; i < rowContainer.length; i++) {
+        tempRowKeep = rowContainer.eq(i);
+        if (tempRowKeep.children('td').children('b').html() !== TABLE_HEADER_FIRST_HEADER_COLUMN)
+            rows.push(tempRowKeep);
+    }
+    extractHosts();
+}
+
+const extractTable = (): void => {
+    hostsTable = $(`#${TABLE_ID}`).last();
+    extractRows();
+}
+
+const loadRoot = (html: any): void => {
+    $ = load(html);
+    extractTable();
 }
 
 rp(url)
-    .then(html => console.log('HTML Successfully loaded', html))
-    .catch(err => console.error('Error occurred on requesting the HTML from URL', err))
+    .then((html: any) => loadRoot(html))
+    .catch((err: any) => console.error('Error occurred on requesting the HTML from URL', err));
