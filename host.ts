@@ -41,7 +41,7 @@ interface ISSL {
 }
 interface IL2TP {
     // value of the <a> 'href' attribute
-    guide: string;
+    guide: string | undefined;
 }
 interface IOpenVPN {
     // value of the <a> 'href' attribute
@@ -106,7 +106,7 @@ export class Host {
     sessions: ISession;
     quality: IQuality;
     ssl: ISSL;
-    // l2tp: IL2TP;
+    l2tp: IL2TP;
     // msSstp: IMsSstp;
     // openVpn: IOpenVPN;
     // score: IScore;
@@ -120,5 +120,6 @@ export class Host {
         this.sessions = Extractors.sessions(tdContainer.eq(2));
         this.quality = Extractors.quality(tdContainer.eq(3));
         this.ssl = Extractors.ssl(tdContainer.eq(4));
+        this.l2tp = Extractors.l2tp(tdContainer.eq(5));
     }
 }

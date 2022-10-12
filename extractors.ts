@@ -61,7 +61,11 @@ export const Extractors = {
             udp: udp(td.text())
         }
     },
-    // l2tp: (td: Cheerio): IHost['l2tp'] => {},
+    l2tp: (td: Cheerio): IHost['l2tp'] => {
+        return {
+            guide: td.children('a').attr('href')
+        }
+    },
     // openVpn: (td: Cheerio): IHost['openVpn'] => {},
     // msSstp: (td: Cheerio): IHost['msSstp'] => {},
     // volunteers: (td: Cheerio): IHost['volunteers'] => {},
