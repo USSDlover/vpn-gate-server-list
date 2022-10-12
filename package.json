@@ -1,13 +1,56 @@
 {
   "name": "vpn-gate-server-list",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "A nodejs package to provide list of available public VPN gate servers",
+  "main": "./lib/cjs/index.js",
+  "types": "./lib/cjs/types/index.d.ts",
   "scripts": {
-    "start": "ts-node index.ts"
+    "test:dev": "ts-node src/index.ts",
+    "clean": "node -e \"require('./cmd').clean()\"",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p ./configs/tsconfig.esm.json && node -e \"require('./cmd').move()\"",
+    "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
+    "prepack": "npm run build"
   },
-  "author": "",
-  "license": "ISC",
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/USSDlover/vpn-gate-server-list.git"
+  },
+  "keywords": [
+    "vpn-gate",
+    "public",
+    "servers",
+    "hosts"
+  ],
+  "author": "Alireza Razinejad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/USSDlover/vpn-gate-server-list/issues"
+  },
+  "homepage": "https://github.com/USSDlover/vpn-gate-server-liste#readme",
+  "files": [
+    "lib/**/*"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./lib/esm/index.mjs",
+        "types": "./lib/esm/types/index.d.ts"
+      },
+      "require": {
+        "default": "./lib/cjs/index.js",
+        "types": "./lib/cjs/types/index.d.ts"
+      }
+    }
+  },
   "devDependencies": {
     "@types/cheerio": "^0.22.31",
     "@types/node": "^18.8.4",
