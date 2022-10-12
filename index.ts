@@ -3,6 +3,7 @@ const url = 'http://202.5.221.66:60279';
 
 const TABLE_ID = 'vg_hosts_table_id';
 
+// The exact pattern from fetched HTML
 interface IHost {
     // First <td> and can use innerText
     country: string;
