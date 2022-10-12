@@ -94,7 +94,14 @@ export const Extractors = {
             udp: udp(td.text())
         }
     },
-    // msSstp: (td: Cheerio): IHost['msSstp'] => {},
+    msSstp: (td: Cheerio): IHost['msSstp'] | undefined => {
+        if (!td || td.text().length === 0)
+            return;
+        return {
+            guide: td.children('a').attr('href') as string,
+            hostName: td.children('p').children('span').children('b').children('span').text()
+        }
+    },
     // volunteers: (td: Cheerio): IHost['volunteers'] => {},
     // score: (td: Cheerio): IHost['score'] => {}
 }

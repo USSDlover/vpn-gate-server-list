@@ -108,9 +108,9 @@ export class Host {
     ssl?: ISSL;
     l2tp?: IL2TP;
     openVpn?: IOpenVPN;
-    // msSstp: IMsSstp;
-    // score: IScore;
+    msSstp?: IMsSstp;
     // volunteers: IVolunteers;
+    // score: IScore;
 
     constructor(tr: Cheerio) {
         const tdContainer = tr.children('td');
@@ -122,5 +122,6 @@ export class Host {
         this.ssl = Extractors.ssl(tdContainer.eq(4));
         this.l2tp = Extractors.l2tp(tdContainer.eq(5));
         this.openVpn = Extractors.openVpn(tdContainer.eq(6));
+        this.msSstp = Extractors.msSstp(tdContainer.eq(7));
     }
 }
