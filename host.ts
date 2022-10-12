@@ -104,10 +104,10 @@ export class Host {
     country: string;
     hostDetail: IHostDetail;
     sessions: ISession;
+    quality: IQuality;
     // l2tp: IL2TP;
     // msSstp: IMsSstp;
     // openVpn: IOpenVPN;
-    // quality: IQuality;
     // score: IScore;
     // ssl: ISSL;
     // volunteers: IVolunteers;
@@ -118,5 +118,6 @@ export class Host {
         this.country = Extractors.country(tdContainer.eq(0));
         this.hostDetail = Extractors.hostDetail(tdContainer.eq(1));
         this.sessions = Extractors.sessions(tdContainer.eq(2));
+        this.quality = Extractors.quality(tdContainer.eq(3));
     }
 }

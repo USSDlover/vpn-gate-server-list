@@ -31,7 +31,18 @@ export const Extractors = {
             totalUsers: totalUsers(td.text())
         }
     },
-    // quality: (td: Cheerio): IHost['quality'] => {},
+    quality: (td: Cheerio): IHost['quality'] => {
+        const loggingPolicy = (text: string): string => {
+            const split = text.split(' ');
+            return split[5].split(':')[1] + ' ' + split[6];
+        }
+        return {
+            speed: td.children('b').eq(0).children('span').text(),
+            ping: td.children('b').eq(1).text(),
+            totalTransferredData: td.children('b').eq(2).text(),
+            loggingPolicy: loggingPolicy(td.text())
+        }
+    },
     // ssl: (td: Cheerio): IHost['ssl'] => {},
     // l2tp: (td: Cheerio): IHost['l2tp'] => {},
     // openVpn: (td: Cheerio): IHost['openVpn'] => {},
