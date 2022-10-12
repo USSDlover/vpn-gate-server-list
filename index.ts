@@ -17,9 +17,7 @@ const rows: Cheerio[] = [];
 const hosts: Host[] = [];
 
 const extractHosts = () => {
-    const testHost = new Host(rows[0]);
-    console.log(testHost);
-    // rows.forEach(row => hosts.push(new Host(row)));
+    rows.forEach(row => hosts.push(new Host(row)));
 }
 
 const extractRows = (): void => {
