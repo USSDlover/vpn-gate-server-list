@@ -18,7 +18,19 @@ export const Extractors = {
             DDNS: cleanUpDDNS(spansContainer.eq(1).text())
         }
     },
-    // session: (td: Cheerio): IHost['session'] => {},
+    sessions: (td: Cheerio): IHost['sessions'] => {
+        const totalUsers = (text: string): number => {
+            return Number(text.split(' ')[3].replace(',', ''));
+        }
+        const count = (text: string): number => {
+            return Number(text.split(' ')[0]);
+        }
+        return {
+            count: count(td.children('b').text()),
+            time: td.children('span').text(),
+            totalUsers: totalUsers(td.text())
+        }
+    },
     // quality: (td: Cheerio): IHost['quality'] => {},
     // ssl: (td: Cheerio): IHost['ssl'] => {},
     // l2tp: (td: Cheerio): IHost['l2tp'] => {},

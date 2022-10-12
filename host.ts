@@ -9,11 +9,11 @@ interface IHostDetail {
 }
 interface ISession {
     // Inside <b>
-    users: string;
+    count: number;
     // inside <span>
     time: string;
     // innerText
-    totalUsers: string;
+    totalUsers: number;
 }
 interface IQuality {
     // first <b> + inside <span>
@@ -103,12 +103,12 @@ export interface IHost {
 export class Host {
     country: string;
     hostDetail: IHostDetail;
+    sessions: ISession;
     // l2tp: IL2TP;
     // msSstp: IMsSstp;
     // openVpn: IOpenVPN;
     // quality: IQuality;
     // score: IScore;
-    // sessions: ISession;
     // ssl: ISSL;
     // volunteers: IVolunteers;
 
@@ -117,5 +117,6 @@ export class Host {
 
         this.country = Extractors.country(tdContainer.eq(0));
         this.hostDetail = Extractors.hostDetail(tdContainer.eq(1));
+        this.sessions = Extractors.sessions(tdContainer.eq(2));
     }
 }
