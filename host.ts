@@ -27,17 +27,17 @@ interface IQuality {
 }
 interface ISSL {
     // value of the <a> 'href' attribute
-    guide: string;
+    guide: string | undefined;
     /**
      * after first <br> (innerText).
      * @example "TCP: 1332"
      */
-    tcp: string;
+    tcp: number | undefined;
     /**
      * after second <br> (innerText).
      * @example "UDP: Supported"
      */
-    udp: boolean;
+    udp: boolean | undefined;
 }
 interface IL2TP {
     // value of the <a> 'href' attribute
@@ -105,11 +105,11 @@ export class Host {
     hostDetail: IHostDetail;
     sessions: ISession;
     quality: IQuality;
+    ssl: ISSL;
     // l2tp: IL2TP;
     // msSstp: IMsSstp;
     // openVpn: IOpenVPN;
     // score: IScore;
-    // ssl: ISSL;
     // volunteers: IVolunteers;
 
     constructor(tr: Cheerio) {
@@ -119,5 +119,6 @@ export class Host {
         this.hostDetail = Extractors.hostDetail(tdContainer.eq(1));
         this.sessions = Extractors.sessions(tdContainer.eq(2));
         this.quality = Extractors.quality(tdContainer.eq(3));
+        this.ssl = Extractors.ssl(tdContainer.eq(4));
     }
 }

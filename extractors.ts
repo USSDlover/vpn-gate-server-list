@@ -43,7 +43,24 @@ export const Extractors = {
             loggingPolicy: loggingPolicy(td.text())
         }
     },
-    // ssl: (td: Cheerio): IHost['ssl'] => {},
+    ssl: (td: Cheerio): IHost['ssl'] => {
+        const tcp = (text: string): number | undefined => {
+            if (!text)
+                return;
+            const split = text.split(' ');
+            return Number(split[2].replace('UDP', '').replace(':', ''));
+        }
+        const udp = (text: string): boolean | undefined => {
+            if (!text)
+                return;
+            return text.includes('Supported');
+        }
+        return {
+            guide: td.children('a').attr('href'),
+            tcp: tcp(td.text()),
+            udp: udp(td.text())
+        }
+    },
     // l2tp: (td: Cheerio): IHost['l2tp'] => {},
     // openVpn: (td: Cheerio): IHost['openVpn'] => {},
     // msSstp: (td: Cheerio): IHost['msSstp'] => {},
