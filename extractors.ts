@@ -43,7 +43,9 @@ export const Extractors = {
             loggingPolicy: loggingPolicy(td.text())
         }
     },
-    ssl: (td: Cheerio): IHost['ssl'] => {
+    ssl: (td: Cheerio): IHost['ssl'] | undefined => {
+        if (!td || td.text().length === 0)
+            return;
         const tcp = (text: string): number | undefined => {
             if (!text)
                 return;
@@ -61,12 +63,37 @@ export const Extractors = {
             udp: udp(td.text())
         }
     },
-    l2tp: (td: Cheerio): IHost['l2tp'] => {
+    l2tp: (td: Cheerio): IHost['l2tp'] | undefined => {
+        if (!td || td.text().length === 0)
+            return;
         return {
             guide: td.children('a').attr('href')
         }
     },
-    // openVpn: (td: Cheerio): IHost['openVpn'] => {},
+    openVpn: (td: Cheerio): IHost['openVpn'] | undefined => {
+        if (!td || td.text().length === 0)
+            return;
+        const tcp = (text: string): number | undefined => {
+            if (!text.includes('TCP'))
+                return;
+            const split = text.split(' ');
+            return Number(split[2].replace('UDP:', ''));
+        }
+        const udp = (text: string): number | undefined => {
+            if (!text.includes('UDP'))
+                return;
+            const split = text.split(' ');
+            if (text.includes('TCP'))
+                return Number(split[3])
+            else
+                return Number(split[2])
+        }
+        return {
+            configFile: td.children('a').attr('href') as string,
+            tcp: tcp(td.text()),
+            udp: udp(td.text())
+        }
+    },
     // msSstp: (td: Cheerio): IHost['msSstp'] => {},
     // volunteers: (td: Cheerio): IHost['volunteers'] => {},
     // score: (td: Cheerio): IHost['score'] => {}

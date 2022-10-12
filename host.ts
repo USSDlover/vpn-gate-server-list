@@ -50,12 +50,12 @@ interface IOpenVPN {
      * after first <br> (innerText).
      * @example "TCP: 1332"
      */
-    tcp: string;
+    tcp: number | undefined;
     /**
      * after second <br> (innerText).
      * @example "UDP: 1384"
      */
-    udp: string;
+    udp: number | undefined;
 }
 interface IMsSstp {
     // value of the <a> 'href' attribute
@@ -105,10 +105,10 @@ export class Host {
     hostDetail: IHostDetail;
     sessions: ISession;
     quality: IQuality;
-    ssl: ISSL;
-    l2tp: IL2TP;
+    ssl?: ISSL;
+    l2tp?: IL2TP;
+    openVpn?: IOpenVPN;
     // msSstp: IMsSstp;
-    // openVpn: IOpenVPN;
     // score: IScore;
     // volunteers: IVolunteers;
 
@@ -121,5 +121,6 @@ export class Host {
         this.quality = Extractors.quality(tdContainer.eq(3));
         this.ssl = Extractors.ssl(tdContainer.eq(4));
         this.l2tp = Extractors.l2tp(tdContainer.eq(5));
+        this.openVpn = Extractors.openVpn(tdContainer.eq(6));
     }
 }
