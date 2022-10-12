@@ -64,7 +64,7 @@ interface IMsSstp {
     hostName: string;
 }
 type IVolunteers = string[];
-type IScore = string;
+type IScore = number;
 
 /**
  *  The exact pattern from fetched HTML
@@ -109,8 +109,8 @@ export class Host {
     l2tp?: IL2TP;
     openVpn?: IOpenVPN;
     msSstp?: IMsSstp;
-    // volunteers: IVolunteers;
-    // score: IScore;
+    volunteers: IVolunteers;
+    score: IScore;
 
     constructor(tr: Cheerio) {
         const tdContainer = tr.children('td');
@@ -123,5 +123,7 @@ export class Host {
         this.l2tp = Extractors.l2tp(tdContainer.eq(5));
         this.openVpn = Extractors.openVpn(tdContainer.eq(6));
         this.msSstp = Extractors.msSstp(tdContainer.eq(7));
+        this.volunteers = Extractors.volunteers(tdContainer.eq(8));
+        this.score = Extractors.score(tdContainer.eq(9));
     }
 }

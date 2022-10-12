@@ -102,6 +102,15 @@ export const Extractors = {
             hostName: td.children('p').children('span').children('b').children('span').text()
         }
     },
-    // volunteers: (td: Cheerio): IHost['volunteers'] => {},
-    // score: (td: Cheerio): IHost['score'] => {}
+    volunteers: (td: Cheerio): IHost['volunteers'] => {
+        const volunteers: string[] = [];
+        const iContainer = td.children('i');
+        for (let i = 0; i < iContainer.length; i++) {
+            volunteers.push(iContainer.eq(i).children('b').text());
+        }
+        return volunteers;
+    },
+    score: (td: Cheerio): IHost['score'] => {
+        return Number(td.children('b').children('span').text().replaceAll(',', ''));
+    }
 }
