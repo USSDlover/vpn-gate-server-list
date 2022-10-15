@@ -70,7 +70,7 @@ type IScore = number;
  *  The exact pattern from fetched HTML
  *  <table> > <tbody> > tr + tr > td
  */
-export interface IHost {
+export interface IServer {
     // First <td> and can use innerText
     country: string;
     // Second <td> and contains two <span>
@@ -100,7 +100,7 @@ export interface IHost {
     score: IScore;
 }
 
-export class Host {
+export class Server {
     country: string;
     hostDetail: IHostDetail;
     sessions: ISession;

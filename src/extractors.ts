@@ -1,11 +1,11 @@
-import {IHost} from './host';
+import {IServer} from './server';
 import Cheerio = cheerio.Cheerio;
 
 export const Extractors = {
-    country: (td: Cheerio): IHost['country'] => {
+    country: (td: Cheerio): IServer['country'] => {
         return td.text();
     },
-    hostDetail: (td: Cheerio): IHost['hostDetail'] => {
+    hostDetail: (td: Cheerio): IServer['hostDetail'] => {
         const spansContainer = td.children('span');
         const cleanUpDDNS = (ddns: string): string | undefined => {
             if (!ddns)
@@ -18,7 +18,7 @@ export const Extractors = {
             DDNS: cleanUpDDNS(spansContainer.eq(1).text())
         }
     },
-    sessions: (td: Cheerio): IHost['sessions'] => {
+    sessions: (td: Cheerio): IServer['sessions'] => {
         const totalUsers = (text: string): number => {
             return Number(text.split(' ')[3].replace(',', ''));
         }
@@ -31,7 +31,7 @@ export const Extractors = {
             totalUsers: totalUsers(td.text())
         }
     },
-    quality: (td: Cheerio): IHost['quality'] => {
+    quality: (td: Cheerio): IServer['quality'] => {
         const loggingPolicy = (text: string): string => {
             const split = text.split(' ');
             return split[5].split(':')[1] + ' ' + split[6];
@@ -43,7 +43,7 @@ export const Extractors = {
             loggingPolicy: loggingPolicy(td.text())
         }
     },
-    ssl: (td: Cheerio): IHost['ssl'] | undefined => {
+    ssl: (td: Cheerio): IServer['ssl'] | undefined => {
         if (!td || td.text().length === 0)
             return;
         const tcp = (text: string): number | undefined => {
@@ -63,14 +63,14 @@ export const Extractors = {
             udp: udp(td.text())
         }
     },
-    l2tp: (td: Cheerio): IHost['l2tp'] | undefined => {
+    l2tp: (td: Cheerio): IServer['l2tp'] | undefined => {
         if (!td || td.text().length === 0)
             return;
         return {
             guide: td.children('a').attr('href')
         }
     },
-    openVpn: (td: Cheerio): IHost['openVpn'] | undefined => {
+    openVpn: (td: Cheerio): IServer['openVpn'] | undefined => {
         if (!td || td.text().length === 0)
             return;
         const tcp = (text: string): number | undefined => {
@@ -94,7 +94,7 @@ export const Extractors = {
             udp: udp(td.text())
         }
     },
-    msSstp: (td: Cheerio): IHost['msSstp'] | undefined => {
+    msSstp: (td: Cheerio): IServer['msSstp'] | undefined => {
         if (!td || td.text().length === 0)
             return;
         return {
@@ -102,7 +102,7 @@ export const Extractors = {
             hostName: td.children('p').children('span').children('b').children('span').text()
         }
     },
-    volunteers: (td: Cheerio): IHost['volunteers'] => {
+    volunteers: (td: Cheerio): IServer['volunteers'] => {
         const volunteers: string[] = [];
         const iContainer = td.children('i');
         for (let i = 0; i < iContainer.length; i++) {
@@ -110,7 +110,7 @@ export const Extractors = {
         }
         return volunteers;
     },
-    score: (td: Cheerio): IHost['score'] => {
+    score: (td: Cheerio): IServer['score'] => {
         return Number(td.children('b').children('span').text().replaceAll(',', ''));
     }
 }
