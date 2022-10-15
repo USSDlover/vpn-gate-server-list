@@ -80,13 +80,13 @@ export interface IHost {
     // 4th <td> have four value
     quality: IQuality;
     // 5th <td> have three value
-    ssl: ISSL;
+    ssl?: ISSL;
     // 6th <td> have three value
-    l2tp: IL2TP;
+    l2tp?: IL2TP;
     // 7th <td> have three value
-    openVpn: IOpenVPN;
+    openVpn?: IOpenVPN;
     // 8th <td> have three value
-    msSstp: IMsSstp;
+    msSstp?: IMsSstp;
     /**
      * 9th <td> have three value
      * List of <i>

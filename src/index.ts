@@ -1,4 +1,4 @@
-import {Host} from "./host";
+import {Host, IHost} from "./host";
 
 const rp = require('request-promise');
 import {load} from "cheerio";
@@ -6,7 +6,7 @@ import {load} from "cheerio";
 import Root = cheerio.Root;
 import Cheerio = cheerio.Cheerio;
 
-const url = 'http://202.5.221.66:60279';
+const DEFAULT_URL = 'https://www.vpngate.net';
 
 const TABLE_ID = 'vg_hosts_table_id';
 const TABLE_HEADER_FIRST_HEADER_COLUMN = 'Country';
@@ -16,11 +16,14 @@ let hostsTable: Cheerio;
 const rows: Cheerio[] = [];
 const hosts: Host[] = [];
 
-const extractHosts = () => {
-    rows.forEach(row => hosts.push(new Host(row)));
+const extractHosts = (): IHost[] => {
+    for (let row of rows) {
+        hosts.push(new Host(row))
+    }
+    return hosts;
 }
 
-const extractRows = (): void => {
+const extractRows = (): IHost[] => {
     let rowContainer = hostsTable.children(`tbody`).children(`tr`);
     let tempRowKeep: Cheerio;
     for (let i = 0; i < rowContainer.length; i++) {
@@ -28,19 +31,24 @@ const extractRows = (): void => {
         if (tempRowKeep.children('td').children('b').html() !== TABLE_HEADER_FIRST_HEADER_COLUMN)
             rows.push(tempRowKeep);
     }
-    extractHosts();
+    return extractHosts();
 }
 
-const extractTable = (): void => {
+const extractTable = (): IHost[] => {
     hostsTable = $(`#${TABLE_ID}`).last();
-    extractRows();
+    return extractRows();
 }
 
-const loadRoot = (html: any): void => {
+const loadRoot = (html: any): IHost[] => {
     $ = load(html);
-    extractTable();
+    return extractTable();
 }
 
-rp(url)
-    .then((html: any) => loadRoot(html))
-    .catch((err: any) => console.error('Error occurred on requesting the HTML from URL', err));
+// TODO: Publish the NPM
+export async function ServerList(url: string = DEFAULT_URL): Promise<IHost[]> {
+    return new Promise<IHost[]>((resolve, reject) => {
+        rp(url)
+            .then((html: any) => resolve(loadRoot(html)))
+            .catch((err: any) => reject('Error occurred on requesting the HTML from URL:\n' + err));
+    });
+}

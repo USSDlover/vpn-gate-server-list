@@ -1,6 +1,6 @@
 {
   "name": "vpn-gate-server-list",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A nodejs package to provide list of available public VPN gate servers",
   "main": "./lib/cjs/index.js",
   "types": "./lib/cjs/types/index.d.ts",
